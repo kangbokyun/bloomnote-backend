@@ -1,0 +1,9 @@
+spring:
+  config:
+    profiles:
+      active: local
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/bloomnote_dev?useSSL=false
+    username: nears
+    password: 1234

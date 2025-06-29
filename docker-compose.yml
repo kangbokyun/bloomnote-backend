@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb-container
+    ports:
+      - "3306:3306"
+    volumes:
+      - bloomnote_db:/var/lib/mysql
+    environment:
+      MARIADB_USER: nears
+      MARIADB_PASSWORD: 1234
+      MARIADB_ROOT_PASSWORD: 1234
+      MARIADB_DATABASE: bloomnote_dev
+
+  redis:
+    image: redis:latest
+    container_name: redis-comics
+    hostname: redis
+    ports:
+      - "6379:6379"
+    environment:
+      TZ: Asia/Seoul
+    restart: always
+
+  kafka:
+    image: confluentinc/cp-kafka:7.8.0
+    container_name: kafka-bloomnote
+    environment:
+      KAFKA_KRAFT_MODE: 'true'
+      KAFKA_NODE_ID: '2'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '2@kafka:9093'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CLIENT:PLAINTEXT,INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT'
+      KAFKA_ADVERTISED_LISTENERS: 'CLIENT://localhost:9092,INTERNAL://kafka:9094'
+      KAFKA_LISTENERS: 'CLIENT://0.0.0.0:9092,INTERNAL://0.0.0.0:9094,CONTROLLER://0.0.0.0:9093'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'INTERNAL'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '1'
+      CLUSTER_ID: 'BloomNoteClusterId'
+      KAFKA_JMX_PORT: '9101'
+      KAFKA_JMX_HOSTNAME: 'localhost'
+      TZ: 'Asia/Seoul'
+      KAFKA_HEAP_OPTS: "-Xms128M -Xmx256M"
+    ports:
+      - '9092:9092'
+    volumes:
+      - kafka-comics:/var/lib/kafka-test/data
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "9090:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=BloomNoteKafka
+      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka:9094
+    depends_on:
+      - kafka
+
+volumes:
+  bloomnote_db:
+  kafka-comics:
+    driver: local

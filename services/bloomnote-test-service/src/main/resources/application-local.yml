@@ -1,0 +1,15 @@
+spring:
+  config:
+    import:
+      - application-mariadb.yml
+  application:
+    name: bloomnote-test-service
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+        highlight_sql: true
