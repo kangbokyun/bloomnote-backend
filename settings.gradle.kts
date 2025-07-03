@@ -9,3 +9,4 @@ include(":modules:bloomnote-database-module")
 
 include("services")
 include(":services:bloomnote-test-service")
+include(":services:bloomnote-user-service")
