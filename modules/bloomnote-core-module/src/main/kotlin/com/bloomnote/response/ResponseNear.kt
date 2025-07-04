@@ -1,4 +1,4 @@
-package com.bloomnote
+package com.bloomnote.response
 
 class ResponseNear<T> {
     var statusCode: Int = 0
