@@ -9,19 +9,11 @@ object JoinApiMapper {
             userEmail = joinRequestDto.userEmail,
             userPassword = joinRequestDto.userPassword,
             userName = joinRequestDto.userName,
-            isParent = joinRequestDto.isParent,
+            isBaby = joinRequestDto.isParent,
             birth = joinRequestDto.birth,
             gender = joinRequestDto.gender,
             relation = joinRequestDto.relation,
             profileImg = joinRequestDto.profileImg,
-            babyInfo = joinRequestDto.babyInfo?.let {
-                PostJoinQuery.BabyInfo(
-                    babyName = it.babyName,
-                    babyProfileImg = it.babyProfileImg,
-                    babyBirth = it.babyBirth,
-                    babyGender = it.babyGender,
-                )
-            },
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.bloomnote.user.presentation.join.controller
 
+import com.bloomnote.user.application.join.usecase.JoinUseCase
 import com.bloomnote.user.presentation.join.dto.JoinUserRequestDto
 import com.bloomnote.user.presentation.join.mapper.JoinApiMapper
 import mu.KotlinLogging
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class JoinController {
+class JoinController(
+    private val useCase: JoinUseCase
+) {
     private val log = KotlinLogging.logger {  }
 
     @PostMapping("/user/join")
@@ -17,5 +20,7 @@ class JoinController {
     ) {
         log.info { "JOIN USER :::: " }
         val command = JoinApiMapper.toDomain(joinRequestDto = joinUserRequestDto)
+        val result = useCase.execute(postJoinQuery = command)
+
     }
 }
