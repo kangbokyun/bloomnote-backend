@@ -4,18 +4,18 @@ import com.bloomnote.user.application.join.mapper.JoinApiMapper
 import com.bloomnote.user.application.join.usecase.JoinUseCase
 import com.bloomnote.user.application.join.usecase.JoinUserResult
 import com.bloomnote.user.application.join.usecase.PostJoinQuery
-import com.bloomnote.user.domain.join.repository.UsersRepository
+import com.bloomnote.user.domain.join.repository.JoinRepository
 import com.bloomnote.user.infrastructure.join.entity.Users
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class JoinService(
-    private val usersRepository: UsersRepository
+    private val joinRepository: JoinRepository
 ) : JoinUseCase {
     @Transactional
     override fun execute(postJoinQuery: PostJoinQuery): JoinUserResult {
-        return usersRepository.save(
+        return joinRepository.save(
             Users(
                 userEmail = postJoinQuery.userEmail,
                 userPassword = postJoinQuery.userPassword,
