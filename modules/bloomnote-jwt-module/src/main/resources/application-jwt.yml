@@ -1,0 +1,9 @@
+jwt:
+  secret: Qmxvb21Ob3RlQnlOZWFyc1N0YXJ0Q29tcGFueUJ5Qks=
+
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/comics?useSSL=false
+    username: nears
+    password: 1234
