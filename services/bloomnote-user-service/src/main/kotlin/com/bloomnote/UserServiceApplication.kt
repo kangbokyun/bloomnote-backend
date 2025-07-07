@@ -1,4 +1,4 @@
-package com.bloomnote.user
+package com.bloomnote
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

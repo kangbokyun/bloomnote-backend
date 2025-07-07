@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class JoinController(
     private val useCase: JoinUseCase,
-    private val apiMapper: JoinApiMapper
 ) {
-    private val log = KotlinLogging.logger {  }
+    private val log = KotlinLogging.logger { }
 
     @PostMapping("/user/join")
     fun joinUser(
@@ -25,7 +24,7 @@ class JoinController(
         log.info { "JOIN USER :::: " }
         val command = JoinApiMapper.toDomain(joinRequestDto = joinUserRequestDto)
         val result = useCase.execute(postJoinQuery = command)
-        val response = apiMapper.toResponse(joinUserResult = result)
+        val response = JoinApiMapper.toResponse(joinUserResult = result)
         return ResponseNear(
             statusCode = HttpStatus.OK.value(),
             result = response

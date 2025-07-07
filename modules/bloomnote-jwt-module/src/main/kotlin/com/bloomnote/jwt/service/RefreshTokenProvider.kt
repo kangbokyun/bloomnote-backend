@@ -4,7 +4,6 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
 import java.util.*
@@ -13,7 +12,7 @@ const val REFRESH_EXPIRATION_TIME: Long = 1000 * 60 * 60
 
 @Component
 class RefreshTokenProvider(
-    private val redisTemplate: RedisTemplate<String, Any>
+//    private val redisTemplate: RedisTemplate<String, Any>
 ) {
     @Value("\${jwt.secret}")
     lateinit var secretKey: String
@@ -38,15 +37,15 @@ class RefreshTokenProvider(
     }
 
     // 리프레시 토큰 검증
-    fun validateRefreshToken(token: String): Boolean {
-        val claims = Jwts.parser()
-            .verifyWith(key)
-            .build()
-            .parseSignedClaims(token)
-
-        val userSubject = claims.payload.subject
-        val redisToken = redisTemplate.opsForValue().get(userSubject)
-
-        return redisToken?.takeIf { it != token }?.let { false } ?: true
-    }
+//    fun validateRefreshToken(token: String): Boolean {
+//        val claims = Jwts.parser()
+//            .verifyWith(key)
+//            .build()
+//            .parseSignedClaims(token)
+//
+//        val userSubject = claims.payload.subject
+//        val redisToken = redisTemplate.opsForValue().get(userSubject)
+//
+//        return redisToken?.takeIf { it != token }?.let { false } ?: true
+//    }
 }
