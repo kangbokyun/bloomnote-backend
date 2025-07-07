@@ -1,0 +1,29 @@
+package com.bloomnote.user.presentation.login.controller
+
+import com.bloomnote.response.ResponseNear
+import com.bloomnote.user.application.login.usecase.LoginUseCase
+import com.bloomnote.user.presentation.login.dto.LoginRequestDto
+import com.bloomnote.user.presentation.login.dto.LoginResponseDto
+import com.bloomnote.user.presentation.login.mapper.LoginApiMapper
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+class LoginController(
+    private val useCase: LoginUseCase
+) {
+    @PostMapping("/login")
+    fun userLogin(
+        @RequestBody loginRequestDto: LoginRequestDto
+    ): ResponseNear<LoginResponseDto> {
+        val command = LoginApiMapper.toDomain(loginRequestDto = loginRequestDto)
+        val result = useCase.execute(postLoginQuery = command)
+        val response = LoginApiMapper.toResponse(loginUserResult = result)
+        return ResponseNear(
+            statusCode = HttpStatus.OK.value(),
+            result = response
+        )
+    }
+}

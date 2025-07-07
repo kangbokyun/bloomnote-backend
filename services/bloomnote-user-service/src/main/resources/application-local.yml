@@ -1,0 +1,16 @@
+spring:
+  config:
+    import:
+      - application-jwt.yml
+      - application-mariadb.yml
+  application:
+    name: bloomnote-users-service
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+        highlight_sql: true
