@@ -63,7 +63,7 @@ class JwtTokenProvider {
 
         val principal: UserDetails = CustomUserJwtResponseDto(
             userId = 0,
-            userName = claims.subject,
+            userEmail = claims.subject,
             password = "",
             authorities = authorities
         )

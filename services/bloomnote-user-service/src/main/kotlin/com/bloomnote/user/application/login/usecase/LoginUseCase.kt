@@ -17,3 +17,9 @@ data class LoginUserResult(
     val accessToken: String,
     val refreshToken: String,
 )
+
+data class CustomUserResponseDto(
+    val userId: Long,
+    val userEmail: String,
+    val userPassword: String
+)

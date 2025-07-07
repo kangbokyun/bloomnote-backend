@@ -23,7 +23,7 @@ class SecurityConfig(
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
-                it.requestMatchers("").anonymous() // 인증 안된 요청 접근 가능
+                it.requestMatchers("/user/login", "/user/join").anonymous() // 인증 안된 요청 접근 가능
                     .anyRequest().permitAll()
             }
             .addFilterBefore(

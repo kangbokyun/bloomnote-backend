@@ -10,6 +10,7 @@ import com.bloomnote.user.domain.login.repository.LoginRepository
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import javax.naming.AuthenticationException
 
@@ -31,7 +32,7 @@ class LoginService(
 
             val user = loginRepository.findByUserEmail(
                 userEmail = postLoginQuery.userEmail
-            )
+            ) ?: throw UsernameNotFoundException("User ${postLoginQuery.userEmail} not found")
 
             val accessToken = jwtAccessTokenProvider.createAccessToken(authentication = authentication).accessToken
             val refreshToken = jwtRefreshTokenProvider.createRefreshToken(authentication = authentication)

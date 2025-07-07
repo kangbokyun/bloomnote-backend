@@ -17,7 +17,7 @@ dependencies {
     implementation(project(":modules:bloomnote-jwt-module"))
     implementation(project(":modules:bloomnote-core-module"))
     implementation(project(":modules:bloomnote-database-module"))
-//    implementation(project(":modules:bloomnote-discovery-module"))
+    implementation(project(":modules:bloomnote-discovery-module"))
 }
 
 tasks {

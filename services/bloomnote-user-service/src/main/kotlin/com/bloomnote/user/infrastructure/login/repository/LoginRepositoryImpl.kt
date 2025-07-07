@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 class LoginRepositoryImpl(
     private val loginJpaRepository: LoginJpaRepository
 ) : LoginRepository {
-    override fun findByUserEmail(userEmail: String): Users {
+    override fun findByUserEmail(userEmail: String): Users? {
         return loginJpaRepository.findByUserEmail(userEmail = userEmail)
     }
 }
