@@ -1,0 +1,45 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: bloomnote-gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      enabled: true
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: '*'
+            allow-credentials: false
+            allowedHeaders: '*'
+            allowedMethods:
+              - PUT
+              - GET
+              - POST
+              - DELETE
+              - OPTIONS
+      default-filters:
+        - GatewayFilter
+      routes:
+        - id: bloomnote-user-service
+          uri: lb://BLOOMNOTE-USER-SERVICE
+          predicates:
+            - Path=/bloomnote/user/**
+          filters:
+            - RewritePath=/bloomnote/user/(?<remaining>.*), /$\{remaining}
+            - StripPrefix=0
+
+#        - id: crawling-service
+#          uri: lb://CRAWLING-SERVICE
+#          predicates:
+#            - Path=/ccomics/crawling/**
+#          filters:
+#            - RewritePath=/ccomics/crawling/(?<remaining>.*), /$\{remaining}
+#            - StripPrefix=0
+
+jwt:
+  secret: Qmxvb21Ob3RlQnlOZWFyc1N0YXJ0Q29tcGFueUJ5Qks=

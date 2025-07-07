@@ -11,12 +11,12 @@ data class JoinUserRequestDto(
     val gender: String,
     val relation: String, // 부모라면 아이와의 관계
     val profileImg: String? = null,
-    val babyInfo: BabyInfo? = null,
+//    val babyInfo: BabyInfo? = null,
 ) {
-    data class BabyInfo(
-        val babyName: String,
-        val babyProfileImg: String? = null,
-        val babyBirth: String,
-        val babyGender: String,
-    )
+//    data class BabyInfo(
+//        val babyName: String,
+//        val babyProfileImg: String? = null,
+//        val babyBirth: String,
+//        val babyGender: String,
+//    )
 }
