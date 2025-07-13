@@ -2,12 +2,8 @@ package com.bloomnote.user.config
 
 import com.bloomnote.jwt.filter.JwtAuthenticationFilter
 import com.bloomnote.jwt.service.JwtTokenProvider
-import com.bloomnote.user.application.login.service.CustomUserDetailService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -19,8 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val jwtTokenProvider: JwtTokenProvider,
-    private val customUserDetailService: CustomUserDetailService
+    private val jwtTokenProvider: JwtTokenProvider
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -28,20 +23,17 @@ class SecurityConfig(
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
-                it.requestMatchers("/join", "/login", "/error").permitAll()
-                    .anyRequest().authenticated()
+                it.requestMatchers("/user/login", "/user/join").anonymous() // 인증 안된 요청 접근 가능
+                    .anyRequest().permitAll()
             }
             .addFilterBefore(
                 JwtAuthenticationFilter(jwtTokenProvider = jwtTokenProvider),
-                UsernamePasswordAuthenticationFilter::class.java,
+                UsernamePasswordAuthenticationFilter::class.java
             )
+
         return http.build()
     }
 
     @Bean
     fun passwordEncoder(): PasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
-
-    @Bean
-    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager =
-        authenticationConfiguration.authenticationManager
 }

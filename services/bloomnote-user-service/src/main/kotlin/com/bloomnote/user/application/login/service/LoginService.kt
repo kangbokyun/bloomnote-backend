@@ -8,7 +8,6 @@ import com.bloomnote.user.application.login.usecase.LoginUserResult
 import com.bloomnote.user.application.login.usecase.PostLoginQuery
 import com.bloomnote.user.domain.login.repository.LoginRepository
 import mu.KotlinLogging
-import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -21,7 +20,7 @@ class LoginService(
     private val loginRepository: LoginRepository,
     private val jwtAccessTokenProvider: JwtTokenProvider,
     private val jwtRefreshTokenProvider: RefreshTokenProvider,
-    private val authenticationManager: AuthenticationManager
+    private val authenticationManagerBuilder: AuthenticationManagerBuilder
 ) : LoginUseCase {
     private val log = KotlinLogging.logger {  }
 
@@ -34,7 +33,7 @@ class LoginService(
             )
             log.info { "authenticationToken : $authenticationToken" }
 
-            val authentication = authenticationManager.authenticate(authenticationToken)
+            val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
             log.info { "authentication : $authentication" }
 
             val user = loginRepository.findByUserEmail(
