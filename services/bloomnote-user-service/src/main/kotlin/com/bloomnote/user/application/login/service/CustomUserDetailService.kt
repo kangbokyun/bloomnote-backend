@@ -1,7 +1,6 @@
 package com.bloomnote.user.application.login.service
 
 import com.bloomnote.jwt.mapper.CustomUserJwtResponseDto
-import com.bloomnote.user.application.login.usecase.CustomUserResponseDto
 import com.bloomnote.user.domain.login.repository.LoginRepository
 import com.bloomnote.user.infrastructure.join.entity.Users
 import org.springframework.security.core.authority.SimpleGrantedAuthority

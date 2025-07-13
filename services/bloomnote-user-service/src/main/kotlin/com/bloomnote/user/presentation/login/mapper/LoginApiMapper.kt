@@ -18,7 +18,7 @@ object LoginApiMapper {
             userId = loginUserResult.userId,
             userEmail = loginUserResult.userEmail,
             userName = loginUserResult.userName,
-            profileImg = loginUserResult.profileImg,
+//            profileImg = loginUserResult.profileImg,
             accessToken = loginUserResult.accessToken,
             refreshToken = loginUserResult.refreshToken,
         )

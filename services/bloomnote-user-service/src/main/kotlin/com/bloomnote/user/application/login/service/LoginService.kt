@@ -7,6 +7,7 @@ import com.bloomnote.user.application.login.usecase.LoginUseCase
 import com.bloomnote.user.application.login.usecase.LoginUserResult
 import com.bloomnote.user.application.login.usecase.PostLoginQuery
 import com.bloomnote.user.domain.login.repository.LoginRepository
+import mu.KotlinLogging
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -21,21 +22,29 @@ class LoginService(
     private val jwtRefreshTokenProvider: RefreshTokenProvider,
     private val authenticationManagerBuilder: AuthenticationManagerBuilder
 ) : LoginUseCase {
+    private val log = KotlinLogging.logger {  }
+
     override fun execute(postLoginQuery: PostLoginQuery): LoginUserResult {
         try {
+            log.info { "postLoginQuery : $postLoginQuery" }
             val authenticationToken = UsernamePasswordAuthenticationToken(
                 postLoginQuery.userEmail,
                 postLoginQuery.userPassword
             )
+            log.info { "authenticationToken : $authenticationToken" }
 
             val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
+            log.info { "authentication : $authentication" }
 
             val user = loginRepository.findByUserEmail(
                 userEmail = postLoginQuery.userEmail
             ) ?: throw UsernameNotFoundException("User ${postLoginQuery.userEmail} not found")
+            log.info { "user : $user" }
 
             val accessToken = jwtAccessTokenProvider.createAccessToken(authentication = authentication).accessToken
             val refreshToken = jwtRefreshTokenProvider.createRefreshToken(authentication = authentication)
+            log.info { "accessToken : $accessToken" }
+            log.info { "refreshToken : $refreshToken" }
 
             return LoginApiMapper.toResult(
                 users = user,
