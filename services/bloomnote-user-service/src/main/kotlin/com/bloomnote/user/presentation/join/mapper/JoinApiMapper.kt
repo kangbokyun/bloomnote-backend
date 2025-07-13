@@ -8,14 +8,11 @@ import com.bloomnote.user.presentation.join.dto.JoinUserResponseDto
 object JoinApiMapper {
     fun toDomain(joinRequestDto: JoinUserRequestDto): PostJoinQuery {
         return PostJoinQuery(
-            userEmail = joinRequestDto.userEmail,
-            userPassword = joinRequestDto.userPassword,
+            userId = joinRequestDto.userId,
+            userPw = joinRequestDto.userPw,
             userName = joinRequestDto.userName,
             isBaby = joinRequestDto.isParent,
-            birth = joinRequestDto.birth,
-            gender = joinRequestDto.gender,
-            relation = joinRequestDto.relation,
-            profileImg = joinRequestDto.profileImg,
+            userBirth = joinRequestDto.userBirth,
         )
     }
 
@@ -24,9 +21,9 @@ object JoinApiMapper {
         userEmail = joinUserResult.userEmail,
         userName = joinUserResult.userName,
         userNickname = joinUserResult.userNickname,
-        isBaby = joinUserResult.isBaby,
-        gender = joinUserResult.gender,
-        relation = joinUserResult.relation,
-        profileImg = joinUserResult.profileImg,
+        isParent = joinUserResult.isParent,
+//        gender = joinUserResult.gender,
+//        relation = joinUserResult.relation,
+//        profileImg = joinUserResult.profileImg,
     )
 }

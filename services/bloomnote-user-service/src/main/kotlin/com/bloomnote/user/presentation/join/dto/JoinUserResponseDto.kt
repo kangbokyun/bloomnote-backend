@@ -5,8 +5,8 @@ data class JoinUserResponseDto(
     val userEmail: String,
     val userName: String,
     val userNickname: String? = null,
-    val isBaby: Boolean,
-    val gender: String,
-    val relation: String? = null,
-    val profileImg: String? = null
+    val isParent: Boolean,
+//    val gender: String,
+//    val relation: String? = null,
+//    val profileImg: String? = null
 )

@@ -17,7 +17,7 @@ class JoinController(
 ) {
     private val log = KotlinLogging.logger { }
 
-    @PostMapping("/user/join")
+    @PostMapping("/join")
     fun joinUser(
         @RequestBody joinUserRequestDto: JoinUserRequestDto
     ): ResponseNear<JoinUserResponseDto> {

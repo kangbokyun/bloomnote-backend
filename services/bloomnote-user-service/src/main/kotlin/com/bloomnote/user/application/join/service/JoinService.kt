@@ -19,15 +19,15 @@ class JoinService(
     override fun execute(postJoinQuery: PostJoinQuery): JoinUserResult {
         return joinRepository.save(
             Users(
-                userEmail = postJoinQuery.userEmail,
-                userPassword = passwordEncoder.encode(postJoinQuery.userPassword),
+                userEmail = postJoinQuery.userId,
+                userPassword = passwordEncoder.encode(postJoinQuery.userPw),
                 userName = postJoinQuery.userName,
                 userNickname = postJoinQuery.userNickname,
-                isBaby = postJoinQuery.isBaby,
-                userBirth = postJoinQuery.birth,
-                userGender = postJoinQuery.gender,
-                relationship = postJoinQuery.relation,
-                profileImg = postJoinQuery.profileImg
+                isParent = postJoinQuery.isBaby,
+                userBirth = postJoinQuery.userBirth,
+//                userGender = postJoinQuery.gender,
+//                relationship = postJoinQuery.relation,
+//                profileImg = postJoinQuery.profileImg
             )
         ).let { JoinApiMapper.toResult(users = it) }
     }

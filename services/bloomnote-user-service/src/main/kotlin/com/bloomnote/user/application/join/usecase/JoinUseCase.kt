@@ -7,16 +7,16 @@ interface JoinUseCase {
 }
 
 data class PostJoinQuery(
-    val userEmail: String,
-    val userPassword: String,
+    val userId: String,
+    val userPw: String,
     val userNickname: String? = null,
     val userName: String,
     val isBaby: Boolean,
-    val birth: LocalDate,
-    val gender: String,
-    val relation: String,
-    val profileImg: String? = null,
-    val babyInfo: BabyInfo? = null,
+    val userBirth: LocalDate,
+//    val gender: String,
+//    val relation: String,
+//    val profileImg: String? = null,
+//    val babyInfo: BabyInfo? = null,
 )
 
 data class BabyInfo(
@@ -31,8 +31,8 @@ data class JoinUserResult(
     val userEmail: String,
     val userName: String,
     val userNickname: String? = null,
-    val isBaby: Boolean,
-    val gender: String,
-    val relation: String? = null,
-    val profileImg: String? = null
+    val isParent: Boolean,
+//    val gender: String,
+//    val relation: String? = null,
+//    val profileImg: String? = null
 )

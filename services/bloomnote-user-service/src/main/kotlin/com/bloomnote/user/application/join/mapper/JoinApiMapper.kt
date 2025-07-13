@@ -10,10 +10,10 @@ object JoinApiMapper {
             userEmail = users.userEmail,
             userName = users.userName,
             userNickname = users.userNickname,
-            isBaby = users.isBaby,
-            gender = users.userGender,
-            relation = users.relationship,
-            profileImg = users.profileImg,
+            isParent = users.isParent,
+//            gender = users.userGender,
+//            relation = users.relationship,
+//            profileImg = users.profileImg,
         )
     }
 }

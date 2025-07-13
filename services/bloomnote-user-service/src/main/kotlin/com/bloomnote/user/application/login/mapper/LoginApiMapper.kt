@@ -9,7 +9,7 @@ object LoginApiMapper {
             userId = users.usersId,
             userEmail = users.userEmail,
             userName = users.userName,
-            profileImg = users.profileImg,
+//            profileImg = users.profileImg,
             accessToken = accessToken,
             refreshToken = refreshToken,
         )
