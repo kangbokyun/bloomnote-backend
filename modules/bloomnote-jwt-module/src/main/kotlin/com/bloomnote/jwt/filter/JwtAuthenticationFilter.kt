@@ -17,8 +17,14 @@ class JwtAuthenticationFilter(
     private val TOKEN_PREFIX = "Bearer"
 
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain?) {
+        val httpRequest = request as HttpServletRequest
         val token = resolveToken(request as HttpServletRequest)
-        token?.takeIf { jwtTokenProvider.validateToken(token) }?.let {
+        if (httpRequest.requestURI == "/login") {
+            chain?.doFilter(request, response)
+            return
+        }
+        if (token.isNullOrBlank().not() && jwtTokenProvider.validateToken(token!!)) {
+//        token?.takeIf { jwtTokenProvider.validateToken(token) }?.let {
             val authentication = jwtTokenProvider.getAuthentication(token)
             SecurityContextHolder.getContext().authentication = authentication
         }
