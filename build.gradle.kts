@@ -2,10 +2,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "2.0.0"
-//    kotlin("plugin.jpa") version "1.9.22"
+    kotlin("plugin.jpa") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
     id("org.springframework.boot") version "3.2.2"
     id("io.spring.dependency-management") version "1.1.5"
+    id("org.jetbrains.kotlin.plugin.noarg") version "1.9.22"
 }
 
 
@@ -24,6 +25,7 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.plugin.spring")
     apply(plugin = "org.springframework.boot")
+    apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
     apply(plugin = "io.spring.dependency-management")
 
     java.sourceCompatibility = JavaVersion.VERSION_21
@@ -53,19 +55,20 @@ subprojects {
             mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
         }
     }
+
+    allOpen {
+        annotation("javax.persistence.Entity")
+        annotation("javax.persistence.MappedSuperclass")
+        annotation("javax.persistence.Embeddable")
+    }
+
+    noArg {
+        annotation("jakarta.persistence.Entity")
+        annotation("jakarta.persistence.MappedSuperclass")
+        annotation("jakarta.persistence.Embeddable")
+    }
 }
 
-allOpen {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.MappedSuperclass")
-    annotation("javax.persistence.Embeddable")
-}
-
-//noArg {
-//    annotation("jakarta.persistence.Entity")
-//    annotation("jakarta.persistence.MappedSuperclass")
-//    annotation("jakarta.persistence.Embeddable")
-//}
 
 dependencies {
     testImplementation(kotlin("test"))

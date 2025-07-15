@@ -17,3 +17,13 @@ spring:
         show_sql: false
         format_sql: true
         highlight_sql: true
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: DEBUG
+#        authentication: DEBUG
+#        web: DEBUG
+#    com:
+#      bloomnote: DEBUG

@@ -20,37 +20,33 @@ class LoginService(
     private val loginRepository: LoginRepository,
     private val jwtAccessTokenProvider: JwtTokenProvider,
     private val jwtRefreshTokenProvider: RefreshTokenProvider,
-    private val authenticationManagerBuilder: AuthenticationManagerBuilder
+    private val authenticationManagerBuilder: AuthenticationManagerBuilder,
 ) : LoginUseCase {
-    private val log = KotlinLogging.logger {  }
+    private val log = KotlinLogging.logger { }
 
     override fun execute(postLoginQuery: PostLoginQuery): LoginUserResult {
         try {
-            log.info { "postLoginQuery : $postLoginQuery" }
             val authenticationToken = UsernamePasswordAuthenticationToken(
                 postLoginQuery.userEmail,
                 postLoginQuery.userPassword
             )
-            log.info { "authenticationToken : $authenticationToken" }
 
             val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
-            log.info { "authentication : $authentication" }
 
             val user = loginRepository.findByUserEmail(
                 userEmail = postLoginQuery.userEmail
             ) ?: throw UsernameNotFoundException("User ${postLoginQuery.userEmail} not found")
-            log.info { "user : $user" }
 
             val accessToken = jwtAccessTokenProvider.createAccessToken(authentication = authentication).accessToken
             val refreshToken = jwtRefreshTokenProvider.createRefreshToken(authentication = authentication)
-            log.info { "accessToken : $accessToken" }
-            log.info { "refreshToken : $refreshToken" }
 
-            return LoginApiMapper.toResult(
+            val loginUser = LoginApiMapper.toResult(
                 users = user,
                 accessToken = accessToken,
                 refreshToken = refreshToken
             )
+
+            return loginUser
         } catch (e: BadCredentialsException) {
             // 비밀번호가 틀렸을 때의 처리
             throw Exception("잘못된 아이디 혹은 비밀번호입니다.")
