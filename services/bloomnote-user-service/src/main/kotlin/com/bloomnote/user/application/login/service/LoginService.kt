@@ -38,7 +38,10 @@ class LoginService(
             ) ?: throw UsernameNotFoundException("User ${postLoginQuery.userEmail} not found")
 
             val accessToken = jwtAccessTokenProvider.createAccessToken(authentication = authentication).accessToken
-            val refreshToken = jwtRefreshTokenProvider.createRefreshToken(authentication = authentication)
+            val refreshToken = jwtRefreshTokenProvider.createRefreshToken(
+                authentication = authentication,
+                userId = user.usersId
+            )
 
             val loginUser = LoginApiMapper.toResult(
                 users = user,
