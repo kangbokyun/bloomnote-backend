@@ -83,6 +83,16 @@ class RefreshTokenProvider(
         }
     }
 
+    // 리프레시 토큰 정보 추출
+    fun findTokenClaims(refreshToken: String): String? {
+        val claims = Jwts.parser()
+            .verifyWith(key)
+            .build()
+            .parseSignedClaims(refreshToken)
+
+        return claims.payload.subject
+    }
+
     private fun createRefreshTokenKey(userId: Long): String {
         return "${TokenRedisKey.REFRESH_TOKEN_KEY.key}$userId"
     }
