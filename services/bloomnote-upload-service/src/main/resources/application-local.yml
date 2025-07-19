@@ -17,6 +17,12 @@ spring:
         format_sql: true
         highlight_sql: true
 
+minio:
+  url: http://192.168.0.25:9000
+  access-user: admin
+  access-password: minioAdmin
+  bucket: bloomnote
+
 #logging:
 #  level:
 #    org:
