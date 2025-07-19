@@ -1,0 +1,28 @@
+server:
+  port: 8081
+
+spring:
+  config:
+    import:
+      - application-mariadb.yml
+  application:
+    name: bloomnote-upload-service
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+        highlight_sql: true
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: DEBUG
+#        authentication: DEBUG
+#        web: DEBUG
+#    com:
+#      bloomnote: DEBUG
