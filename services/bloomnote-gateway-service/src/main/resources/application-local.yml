@@ -33,13 +33,13 @@ spring:
             - RewritePath=/bloomnote/user/(?<remaining>.*), /$\{remaining}
             - StripPrefix=0
 
-#        - id: crawling-service
-#          uri: lb://CRAWLING-SERVICE
-#          predicates:
-#            - Path=/ccomics/crawling/**
-#          filters:
-#            - RewritePath=/ccomics/crawling/(?<remaining>.*), /$\{remaining}
-#            - StripPrefix=0
+        - id: bloomnote-upload-service
+          uri: lb://BLOOMNOTE-UPLOAD-SERVICE
+          predicates:
+            - Path=/bloomnote/upload/**
+          filters:
+            - RewritePath=/bloomnote/upload/(?<remaining>.*), /$\{remaining}
+            - StripPrefix=0
 
 jwt:
   secret: Qmxvb21Ob3RlQnlOZWFyc1N0YXJ0Q29tcGFueUJ5Qks=
