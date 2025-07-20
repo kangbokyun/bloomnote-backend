@@ -21,7 +21,7 @@ minio:
   url: http://192.168.0.25:9000
   access-user: admin
   access-password: minioAdmin
-  bucket: bloomnote
+  bucket-name: bloomnote
 
 #logging:
 #  level:

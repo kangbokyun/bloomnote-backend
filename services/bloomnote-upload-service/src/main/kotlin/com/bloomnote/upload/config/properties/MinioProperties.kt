@@ -7,5 +7,5 @@ data class MinioProperties(
     val url: String,
     val accessUser: String,
     val accessPassword: String,
-    val bucket: String
+    val bucketName: String
 )
