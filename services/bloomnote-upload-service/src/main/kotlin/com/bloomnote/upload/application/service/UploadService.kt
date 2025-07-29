@@ -20,7 +20,7 @@ class UploadService(
 
     override fun execute(getUploadQuery: GetUploadQuery): PresignedIssuedResult {
         val uuid = UUID.randomUUID().toString()
-        val objectKey = "${getUploadQuery.uploadType}/$uuid.${getUploadQuery.ext}"
+        val objectKey = "${getUploadQuery.uploadType.value}/$uuid.${getUploadQuery.ext}"
 
         val presignedUrl = minioClient.getPresignedObjectUrl(
             GetPresignedObjectUrlArgs.builder()

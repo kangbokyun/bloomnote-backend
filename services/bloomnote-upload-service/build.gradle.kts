@@ -11,8 +11,9 @@ dependencies {
     implementation("org.mariadb.jdbc:mariadb-java-client")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
-    implementation(project(":modules:bloomnote-jwt-module"))
+//    implementation(project(":modules:bloomnote-jwt-module"))
     implementation(project(":modules:bloomnote-core-module"))
+    implementation(project(":modules:bloomnote-redis-module"))
     implementation(project(":modules:bloomnote-database-module"))
     implementation(project(":modules:bloomnote-discovery-module"))
 }

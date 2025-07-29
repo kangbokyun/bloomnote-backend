@@ -4,6 +4,7 @@ server:
 spring:
   config:
     import:
+#      - application-jwt.yml
       - application-mariadb.yml
   application:
     name: bloomnote-upload-service

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/domains" />
+            <option value="$PROJECT_DIR$/modules" />
+            <option value="$PROJECT_DIR$/modules/bloomnote-core-module" />
+            <option value="$PROJECT_DIR$/modules/bloomnote-database-module" />
+            <option value="$PROJECT_DIR$/modules/bloomnote-discovery-module" />
+            <option value="$PROJECT_DIR$/modules/bloomnote-jwt-module" />
+            <option value="$PROJECT_DIR$/modules/bloomnote-redis-module" />
+            <option value="$PROJECT_DIR$/services" />
+            <option value="$PROJECT_DIR$/services/bloomnote-discovery-service" />
+            <option value="$PROJECT_DIR$/services/bloomnote-gateway-service" />
+            <option value="$PROJECT_DIR$/services/bloomnote-upload-service" />
+            <option value="$PROJECT_DIR$/services/bloomnote-user-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
