@@ -28,7 +28,7 @@ class SecurityConfig(
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
                 it.requestMatchers("/user/join").anonymous() // 인증 안된 요청 접근 가능
-                    .requestMatchers("/user/token").hasRole("USER")
+//                    .requestMatchers("/user/token/validate").authenticated()
                     .anyRequest().permitAll()
             }
             .addFilterBefore(

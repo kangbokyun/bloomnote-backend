@@ -30,6 +30,11 @@ class GatewayFilter(
             val requestToken: MutableList<String>? = request.headers[HttpHeaders.AUTHORIZATION]
             log.info { "GatewayFilter :::: request-uri-path [ ${request.uri.path} ][TOKEN: $requestToken]" }
 
+            if (request.uri.path.contains("/bloomnote/user/token/validate")) {
+                log.info { "Bypass JWT check for ${request.uri.path}" }
+                return@GatewayFilter chain.filter(exchange) // 필터 우회
+            }
+
             if (requestToken.isNullOrEmpty()) {
                 log.info { "Token is Null Or Empty Or BadRequest" }
             } else {

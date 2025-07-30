@@ -17,10 +17,27 @@ class JwtAuthenticationFilter(
     private val TOKEN_PREFIX = "Bearer"
 
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain?) {
-        val token = resolveToken(request as HttpServletRequest)
-//        if (token.isNullOrBlank().not() && jwtTokenProvider.validateToken(token!!)) {
-        token?.takeIf { jwtTokenProvider.validateToken(it) }?.let {
-            val authentication = jwtTokenProvider.getAuthentication(it)
+        val httpRequest = request as HttpServletRequest
+        val uri = httpRequest.requestURI
+
+        log.info("uri : $uri")
+
+        // ✅ 인증 필터 우회 경로
+        val bypassPaths = setOf(
+            "/token/validate",
+            "/join",
+            "/login"
+        )
+
+        if (bypassPaths.any { uri.contains(it) }) {
+            log.info { "JwtAuthenticationFilter bypassed for URI: $uri" }
+            chain?.doFilter(request, response)
+            return
+        }
+
+        val token = resolveToken(httpRequest)
+        if (!token.isNullOrBlank() && jwtTokenProvider.validateToken(token)) {
+            val authentication = jwtTokenProvider.getAuthentication(token)
             SecurityContextHolder.getContext().authentication = authentication
         }
 

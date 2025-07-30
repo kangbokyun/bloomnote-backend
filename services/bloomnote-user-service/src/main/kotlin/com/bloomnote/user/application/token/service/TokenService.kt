@@ -10,6 +10,7 @@ import com.bloomnote.user.application.token.usecase.TokenUseCase
 import mu.KotlinLogging
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Service
 
 @Service
@@ -25,25 +26,27 @@ class TokenService(
             userId = postTokenQuery.userId,
             refreshToken = postTokenQuery.refreshToken
         )
-
-        if (!isValidRefreshToken) throw IllegalArgumentException("asd")
+        if (!isValidRefreshToken) throw IllegalArgumentException("Invalid refresh token")
 
         val username = refreshTokenProvider.findTokenClaims(
             refreshToken = postTokenQuery.refreshToken
         )
 
-        val authenticationToken = UsernamePasswordAuthenticationToken(
-            username,
-            null
+        // 🔽 직접 사용자 정보 조회 및 인증 객체 생성
+        val user = userRepository.findByUserEmail(userEmail = username!!)
+            ?: throw IllegalArgumentException("User not found")
+
+        val authentication = UsernamePasswordAuthenticationToken(
+            user,
+            null,
+            listOf(SimpleGrantedAuthority("ROLE_USER"))
         )
 
-        val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
         log.info { "authentication : $authentication" }
-        val user = userRepository.findByUserEmail(userEmail = username!!)
         log.info { "user : $user" }
 
         val accessToken = accessTokenProvider.createAccessToken(authentication = authentication).accessToken
-        val refreshToken = refreshTokenProvider.createRefreshToken(authentication = authentication, userId = user!!.usersId)
+        val refreshToken = refreshTokenProvider.createRefreshToken(authentication = authentication, userId = user.usersId)
 
         return TokenApiMapper.toResult(
             userId = postTokenQuery.userId,

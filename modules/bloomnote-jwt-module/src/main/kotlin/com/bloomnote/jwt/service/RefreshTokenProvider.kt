@@ -39,6 +39,7 @@ class RefreshTokenProvider(
             .signWith(key)
             .compact()
 
+        redisTemplate.delete(createRefreshTokenKey(userId = userId))
         redisTemplate.opsForValue().set(
             createRefreshTokenKey(
                 userId = userId
