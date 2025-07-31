@@ -69,8 +69,8 @@ class GatewayFilter(
     }
 
     private fun decoderSecretKeyToByte(): SecretKey {
-        val secretKeyEncodeBase64 = Encoders.BASE64.encode(secretKey.toByteArray())
-        val keyBytes = Decoders.BASE64.decode(secretKeyEncodeBase64)
+//        val secretKeyEncodeBase64 = Encoders.BASE64.encode(secretKey.toByteArray())
+        val keyBytes = Decoders.BASE64.decode(secretKey)
 
         return Keys.hmacShaKeyFor(keyBytes)
     }
