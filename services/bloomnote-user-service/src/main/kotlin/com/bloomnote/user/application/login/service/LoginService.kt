@@ -30,24 +30,30 @@ class LoginService(
                 postLoginQuery.userEmail,
                 postLoginQuery.userPassword
             )
+            log.info { "authenticationToken : $authenticationToken" }
 
             val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
+            log.info { "authentication : $authentication" }
 
             val user = loginRepository.findByUserEmail(
                 userEmail = postLoginQuery.userEmail
             ) ?: throw UsernameNotFoundException("User ${postLoginQuery.userEmail} not found")
+            log.info { "user : $user" }
 
             val accessToken = jwtAccessTokenProvider.createAccessToken(authentication = authentication).accessToken
+            log.info { "accessToken : $accessToken" }
             val refreshToken = jwtRefreshTokenProvider.createRefreshToken(
                 authentication = authentication,
                 userId = user.usersId
             )
+            log.info { "refreshToken : $refreshToken" }
 
             val loginUser = LoginApiMapper.toResult(
                 users = user,
                 accessToken = accessToken,
                 refreshToken = refreshToken
             )
+            log.info { "loginUser : $loginUser" }
 
             return loginUser
         } catch (e: BadCredentialsException) {

@@ -23,14 +23,14 @@ class JwtAuthenticationFilter(
         log.info("uri : $uri")
 
         // ✅ 인증 필터 우회 경로
-        val bypassPaths = setOf(
-            "/token/validate",
-            "/join",
-            "/login"
+        val byPassList = listOf(
+            "/login",
+            "/signup",
+            "/token/validate"
         )
-
-        if (bypassPaths.any { uri.contains(it) }) {
-            log.info { "JwtAuthenticationFilter bypassed for URI: $uri" }
+        byPassList.firstOrNull {
+            uri.startsWith(it)
+        }?.let {
             chain?.doFilter(request, response)
             return
         }

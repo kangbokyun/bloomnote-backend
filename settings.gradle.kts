@@ -4,6 +4,7 @@ include("domains")
 
 include("modules")
 include(":modules:bloomnote-jwt-module")
+include(":modules:bloomnote-jpa-module")
 include(":modules:bloomnote-core-module")
 include(":modules:bloomnote-redis-module")
 include(":modules:bloomnote-database-module")

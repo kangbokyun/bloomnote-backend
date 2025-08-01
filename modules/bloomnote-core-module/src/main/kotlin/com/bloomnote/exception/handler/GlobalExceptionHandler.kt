@@ -3,6 +3,7 @@ package com.bloomnote.exception.handler
 import com.bloomnote.exception.domain.IllegalArgument
 import com.bloomnote.exception.domain.IllegalState
 import com.bloomnote.response.ResponseNear
+import io.jsonwebtoken.JwtException
 import jakarta.servlet.http.HttpServletRequest
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
@@ -42,5 +43,17 @@ class GlobalExceptionHandler {
             statusCode = illegalState.errorCode,
             result = illegalState.state
         )
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = [TokenExpireException::class])
+    fun tokenExpiredErrorHandler(e: Exception): ResponseNear<String> {
+        return ResponseNear(HttpStatus.UNAUTHORIZED.value(), message = "jwt.token.expire")
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = [com.bloomnote.exception.handler.JwtException::class, JwtException::class])
+    fun tokenErrorHandler(req: HttpServletRequest, e: Exception): ResponseNear<Nothing> {
+        return ResponseNear(HttpStatus.UNAUTHORIZED.value(), message = "jwt.token.abnormal")
     }
 }

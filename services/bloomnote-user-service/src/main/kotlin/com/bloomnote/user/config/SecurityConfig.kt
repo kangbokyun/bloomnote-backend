@@ -6,6 +6,7 @@ import com.bloomnote.jwt.service.JwtTokenProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -38,10 +39,18 @@ class SecurityConfig(
         return http.build()
     }
 
-    @Bean
-    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager =
-        authenticationConfiguration.authenticationManager
+//    @Bean
+//    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager =
+//        authenticationConfiguration.authenticationManager
 
     @Bean
     fun passwordEncoder(): PasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
+
+    @Bean
+    fun authenticationManager(http: HttpSecurity): AuthenticationManager {
+        val authBuilder = http.getSharedObject(AuthenticationManagerBuilder::class.java)
+        authBuilder.userDetailsService(customUserDetailService)
+            .passwordEncoder(passwordEncoder())
+        return authBuilder.build()
+    }
 }

@@ -23,8 +23,11 @@ class LoginController(
     ): ResponseNear<LoginResponseDto> {
         log.info { "loginRequestDto : $loginRequestDto" }
         val command = LoginApiMapper.toDomain(loginRequestDto = loginRequestDto)
+        log.info { "command : $command" }
         val result = useCase.execute(postLoginQuery = command)
+        log.info { "result : $result" }
         val response = LoginApiMapper.toResponse(loginUserResult = result)
+        log.info { "response : $response" }
         return ResponseNear(
             statusCode = HttpStatus.OK.value(),
             result = response

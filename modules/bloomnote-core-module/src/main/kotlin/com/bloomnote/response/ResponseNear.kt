@@ -7,10 +7,16 @@ class ResponseNear<T> {
 
     constructor()
     constructor(statusCode: Int) { this.statusCode = statusCode }
+    constructor(statusCode: Int, message: String) {
+        this.statusCode = statusCode
+        this.message = message
+    }
+
     constructor(statusCode: Int, result: T) {
         this.statusCode = statusCode
         this.result = result
     }
+
     constructor(statusCode: Int, result: T, message: String) {
         this.statusCode = statusCode
         this.result = result

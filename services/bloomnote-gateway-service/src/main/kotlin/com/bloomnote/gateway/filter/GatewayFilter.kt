@@ -1,19 +1,24 @@
 package com.bloomnote.gateway.filter
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders
-import io.jsonwebtoken.io.Encoders
 import io.jsonwebtoken.security.Keys
 import mu.KotlinLogging
 import org.apache.http.HttpHeaders
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cloud.gateway.filter.GatewayFilter
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import org.springframework.web.server.ServerWebExchange
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import javax.crypto.SecretKey
 
 @Component
 class GatewayFilter(
+    private val objectMapper: ObjectMapper,
     @Value("\${jwt.secret}") private val secretKey: String
 ) : AbstractGatewayFilterFactory<com.bloomnote.gateway.filter.GatewayFilter.Config>(Config::class.java) {
     private val log = KotlinLogging.logger { }
@@ -27,45 +32,62 @@ class GatewayFilter(
     override fun apply(config: Config?): GatewayFilter {
         return GatewayFilter { exchange, chain ->
             val request = exchange.request
-            val requestToken: MutableList<String>? = request.headers[HttpHeaders.AUTHORIZATION]
-            log.info { "GatewayFilter :::: request-uri-path [ ${request.uri.path} ][TOKEN: $requestToken]" }
+            val tokenHeaders: MutableList<String>? = request.headers[HttpHeaders.AUTHORIZATION]
+            log.info { "GatewayFilter :::: request-uri-path [ ${request.uri.path} ][TOKEN: $tokenHeaders]" }
 
-            if (request.uri.path.contains("/bloomnote/user/token/validate")) {
-                log.info { "Bypass JWT check for ${request.uri.path}" }
-                return@GatewayFilter chain.filter(exchange) // 필터 우회
+            val byPassList = listOf(
+                "/bloomnote/user/login",
+                "/bloomnote/user/signup",
+                "/bloomnote/user/token/validate"
+            )
+            byPassList.firstOrNull {
+                request.uri.path.startsWith(it)
+            }?.let { return@GatewayFilter chain.filter(exchange) }
+
+            if (tokenHeaders.isNullOrEmpty()) {
+                return@GatewayFilter handleUnAuthorized(exchange, "Token is missing")
             }
 
-            if (requestToken.isNullOrEmpty()) {
-                log.info { "Token is Null Or Empty Or BadRequest" }
-            } else {
-                val token = requestToken[0].split(" ")[1]
-                log.info { "TOKEN :::: $token" }
+            val token = try {
+                tokenHeaders[0].split(" ")[1]
+            } catch (e: Exception) {
+                return@GatewayFilter handleUnAuthorized(exchange, "Token format is invalid")
+            }
 
-                val tokenCheck = jwsExtractAllClaims(token)
-                log.info { "tokenCheck ::: $tokenCheck" }
+            try {
+                val claims = jwsExtractAllClaims(token)
+                log.info { "tokenCheck ::: $claims" }
+            } catch (e: ExpiredJwtException) {
+                log.warn { "Expired JWT Token: ${e.message}" }
+                return@GatewayFilter handleUnAuthorized(exchange, "JWT token expired")
+            } catch (e: JwtException) {
+                log.warn { "JWT Exception: ${e.message}" }
+                return@GatewayFilter handleUnAuthorized(exchange, "JWT token invalid")
+            } catch (e: Exception) {
+                log.error(e) { "Unexpected error during JWT validation" }
+                return@GatewayFilter handleUnAuthorized(exchange, "Authentication error")
             }
 
             chain.filter(exchange)
         }
     }
 
+
+    @Throws(
+        ClaimJwtException::class,
+        ExpiredJwtException::class,
+        MalformedJwtException::class,
+        PrematureJwtException::class,
+        SecurityException::class,
+        UnsupportedJwtException::class
+    )
     private fun jwsExtractAllClaims(token: String): Claims {
-        try {
-            return Jwts
-                .parser()
-                .verifyWith(this.decoderSecretKeyToByte())
-                .build()
-                .parseSignedClaims(token)
-                .payload
-        } catch (e: ExpiredJwtException) {
-            throw JwtException("jwt.token.expire")
-        } catch (e: UnsupportedJwtException) {
-            throw JwtException("JWT UnsupportedJwtException Exception")
-        } catch (e: MalformedJwtException) {
-            throw JwtException("JWT MalformedJwtException Exception")
-        } catch (e: IllegalArgumentException) {
-            throw JwtException("JWT IllegalArgumentException Exception")
-        }
+        return Jwts
+            .parser()
+            .verifyWith(this.decoderSecretKeyToByte())
+            .build()
+            .parseSignedClaims(token)
+            .payload
     }
 
     private fun decoderSecretKeyToByte(): SecretKey {
@@ -74,4 +96,26 @@ class GatewayFilter(
 
         return Keys.hmacShaKeyFor(keyBytes)
     }
+
+    private fun handleUnAuthorized(exchange: ServerWebExchange, message: String): Mono<Void> {
+        exchange.response.statusCode = HttpStatus.UNAUTHORIZED
+        val body = UnAuthorized(statusCode = HttpStatus.UNAUTHORIZED.value(), message = message)
+
+        return exchange.response.writeWith(
+            Flux
+                .just(
+                    exchange
+                        .response
+                        .bufferFactory()
+                        .wrap(
+                            objectMapper.writeValueAsString(body).encodeToByteArray()
+                        )
+                )
+        )
+    }
+
+    data class UnAuthorized(
+        val statusCode: Int,
+        val message: String
+    )
 }

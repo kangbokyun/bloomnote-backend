@@ -1,4 +1,4 @@
-package com.bloomnote.util
+package com.bloomnote.jpa.base
 
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.MappedSuperclass

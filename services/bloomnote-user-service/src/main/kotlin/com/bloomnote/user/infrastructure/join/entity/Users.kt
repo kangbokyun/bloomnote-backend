@@ -1,6 +1,6 @@
 package com.bloomnote.user.infrastructure.join.entity
 
-import com.bloomnote.util.BaseEntity
+import com.bloomnote.jpa.base.BaseEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.Comment
 import java.time.LocalDate
