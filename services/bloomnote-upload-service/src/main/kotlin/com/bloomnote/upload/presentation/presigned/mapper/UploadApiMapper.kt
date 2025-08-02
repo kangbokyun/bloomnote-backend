@@ -1,7 +1,7 @@
 package com.bloomnote.upload.presentation.presigned.mapper
 
-import com.bloomnote.upload.application.usecase.GetUploadQuery
-import com.bloomnote.upload.application.usecase.PresignedIssuedResult
+import com.bloomnote.upload.application.presigned.usecase.GetUploadQuery
+import com.bloomnote.upload.application.presigned.usecase.PresignedIssuedResult
 import com.bloomnote.upload.presentation.presigned.dto.PresignedUrlResponseDto
 import com.bloomnote.upload.presentation.presigned.dto.enums.UploadType
 

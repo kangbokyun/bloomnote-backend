@@ -1,9 +1,9 @@
-package com.bloomnote.upload.application.service
+package com.bloomnote.upload.application.presigned.service
 
-import com.bloomnote.upload.application.mapper.UploadApiMapper
-import com.bloomnote.upload.application.usecase.GetUploadQuery
-import com.bloomnote.upload.application.usecase.PresignedIssuedResult
-import com.bloomnote.upload.application.usecase.UploadUseCase
+import com.bloomnote.upload.application.presigned.mapper.UploadApiMapper
+import com.bloomnote.upload.application.presigned.usecase.GetUploadQuery
+import com.bloomnote.upload.application.presigned.usecase.PresignedIssuedResult
+import com.bloomnote.upload.application.presigned.usecase.UploadUseCase
 import com.bloomnote.upload.config.properties.MinioProperties
 import io.minio.GetPresignedObjectUrlArgs
 import io.minio.MinioClient

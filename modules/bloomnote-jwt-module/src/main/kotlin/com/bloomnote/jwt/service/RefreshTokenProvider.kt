@@ -1,12 +1,16 @@
 package com.bloomnote.jwt.service
 
+import com.bloomnote.jwt.domain.entity.AuthenticateUser
 import com.bloomnote.jwt.domain.enums.TokenRedisKey
+import com.bloomnote.jwt.mapper.CustomUserJwtResponseDto
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
+import io.lettuce.core.KillArgs.Builder.user
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.security.core.Authentication
@@ -18,6 +22,7 @@ const val REFRESH_EXPIRATION_TIME: Long = 1000 * 60 * 60
 
 @Component
 class RefreshTokenProvider(
+    private val objectMapper: ObjectMapper,
     private val redisTemplate: RedisTemplate<String, Any>
 ) {
     @Value("\${jwt.secret}")
@@ -31,9 +36,19 @@ class RefreshTokenProvider(
     fun createRefreshToken(authentication: Authentication, userId: Long): String {
         val now = Date()
         val refreshExpiration = Date(now.time + REFRESH_EXPIRATION_TIME)
+        val userEmail = when (val principal = authentication.principal) {
+            is CustomUserJwtResponseDto -> principal.username
+            is AuthenticateUser -> principal.userEmail
+            else -> throw IllegalStateException("Unexpected principal type: ${principal::class.qualifiedName}")
+        }
+
 
         val refreshToken = Jwts.builder()
-            .subject(authentication.name)
+            .subject(userEmail)
+            .claim(
+                "user_info",
+                objectMapper.writeValueAsString(authentication.principal)
+            )
             .issuedAt(now)
             .expiration(refreshExpiration)
             .signWith(key)

@@ -25,8 +25,9 @@ class SecurityConfig(
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
-                it.requestMatchers("/upload/presigned/issued/album/photo").authenticated()
-                    .anyRequest().permitAll()
+//                it.requestMatchers("/upload/presigned/issued/album/photo").authenticated()
+//                    .anyRequest().permitAll()
+                it.anyRequest().authenticated()
             }
             .addFilterBefore(
                 JwtAuthenticationFilter(jwtTokenProvider = jwtTokenProvider),

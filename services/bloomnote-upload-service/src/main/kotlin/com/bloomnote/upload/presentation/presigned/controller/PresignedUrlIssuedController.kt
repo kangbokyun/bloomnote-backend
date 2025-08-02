@@ -1,7 +1,7 @@
 package com.bloomnote.upload.presentation.presigned.controller
 
 import com.bloomnote.response.ResponseNear
-import com.bloomnote.upload.application.usecase.UploadUseCase
+import com.bloomnote.upload.application.presigned.usecase.UploadUseCase
 import com.bloomnote.upload.presentation.presigned.dto.PresignedUrlResponseDto
 import com.bloomnote.upload.presentation.presigned.dto.enums.UploadType
 import com.bloomnote.upload.presentation.presigned.mapper.UploadApiMapper

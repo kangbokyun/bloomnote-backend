@@ -1,4 +1,4 @@
-package com.bloomnote.upload.application.usecase
+package com.bloomnote.upload.application.presigned.usecase
 
 import com.bloomnote.upload.presentation.presigned.dto.enums.UploadType
 
