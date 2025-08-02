@@ -10,7 +10,6 @@ import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
-import io.lettuce.core.KillArgs.Builder.user
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.security.core.Authentication
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Component
 import java.security.SignatureException
 import java.util.*
 
-const val REFRESH_EXPIRATION_TIME: Long = 1000 * 60 * 60
+const val REFRESH_EXPIRATION_TIME: Long = 1000 * 60 * 60 * 12
 
 @Component
 class RefreshTokenProvider(
@@ -81,7 +80,7 @@ class RefreshTokenProvider(
             )
 
             return redisToken != null && redisToken == refreshToken
-        }  catch (e: ExpiredJwtException) {
+        } catch (e: ExpiredJwtException) {
             // 토큰 만료
             return false
         } catch (e: SignatureException) {
