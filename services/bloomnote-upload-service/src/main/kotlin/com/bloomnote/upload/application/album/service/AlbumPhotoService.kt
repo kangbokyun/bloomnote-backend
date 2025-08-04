@@ -38,6 +38,8 @@ class AlbumPhotoService(
             userId = getAlbumQuery.userId,
             startDate = startDate,
             endDate = endDate
-        ).map { toAlbumResult(it) }
+        )
+            .map { toAlbumResult(it) }
+            .sortedByDescending { it.createdDateTime }
     }
 }
