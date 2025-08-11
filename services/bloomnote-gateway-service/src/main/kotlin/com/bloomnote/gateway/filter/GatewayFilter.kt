@@ -38,7 +38,8 @@ class GatewayFilter(
             val byPassList = listOf(
                 "/bloomnote/user/login",
                 "/bloomnote/user/signup",
-                "/bloomnote/user/token/validate"
+                "/bloomnote/user/token/validate",
+                "/bloomnote/upload/hugging/test",
             )
             byPassList.firstOrNull {
                 request.uri.path.startsWith(it)

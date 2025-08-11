@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
 
 @RestController
 class AlbumPhotoController(
@@ -44,5 +46,27 @@ class AlbumPhotoController(
             statusCode = HttpStatus.OK.value(),
             result = response
         )
+    }
+
+    @GetMapping("/hugging/test")
+    fun analyzeImages(): Mono<Map<String, Any>> {
+        log.info { "init" }
+        val webClient = WebClient.create("http://58.236.116.237:5000")
+        log.info { "webClient : $webClient" }
+        val imageUrlList: List<String> = listOf(
+            "http://192.168.0.25:9000/bloomnote/ALBUM/PHOTO/0331830d-4862-4298-b3f9-0fe8d4b6a89c.jpg",
+            "http://192.168.0.25:9000/bloomnote/ALBUM/PHOTO/e1e01114-8b4a-4301-b1ef-bc77d39c0f06.jpg",
+            "http://192.168.0.25:9000/bloomnote/ALBUM/PHOTO/ef6fb6ef-a5ea-45a4-a630-b2acb5813e8d.jpg",
+            "http://192.168.0.25:9000/bloomnote/ALBUM/PHOTO/6ee778f4-155f-4184-a22b-ce499b2243b5.jpg",
+            "http://192.168.0.25:9000/bloomnote/ALBUM/PHOTO/992cc003-a098-48eb-be78-8782dd70c6ec.jpg",
+        )
+        log.info { "imageUrlList : $imageUrlList" }
+        val requestBody = mapOf("image_urls" to imageUrlList)
+
+        return webClient.post()
+            .uri("/analyze")
+            .bodyValue(requestBody)
+            .retrieve()
+            .bodyToMono(Map::class.java) as Mono<Map<String, Any>>
     }
 }

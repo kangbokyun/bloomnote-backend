@@ -27,7 +27,10 @@ class SecurityConfig(
             .authorizeHttpRequests {
 //                it.requestMatchers("/upload/presigned/issued/album/photo").authenticated()
 //                    .anyRequest().permitAll()
-                it.anyRequest().authenticated()
+                it
+//                    .requestMatchers("/hugging/test")
+                    .anyRequest().permitAll()
+//                    .authenticated()
             }
             .addFilterBefore(
                 JwtAuthenticationFilter(jwtTokenProvider = jwtTokenProvider),
