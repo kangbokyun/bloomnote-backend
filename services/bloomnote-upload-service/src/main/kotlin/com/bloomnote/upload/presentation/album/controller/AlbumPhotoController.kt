@@ -6,6 +6,7 @@ import com.bloomnote.upload.presentation.album.dto.AlbumPhotoRequestDto
 import com.bloomnote.upload.presentation.album.dto.AlbumPhotoResponseDto
 import com.bloomnote.upload.presentation.album.mapper.PhotoApiMapper
 import mu.KotlinLogging
+import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -49,7 +50,7 @@ class AlbumPhotoController(
     }
 
     @GetMapping("/hugging/test")
-    fun analyzeImages(): Mono<Map<String, Any>> {
+    fun analyzeImages(): List<String>? {
         log.info { "init" }
         val webClient = WebClient.create("http://58.236.116.237:5000")
         log.info { "webClient : $webClient" }
@@ -63,10 +64,16 @@ class AlbumPhotoController(
         log.info { "imageUrlList : $imageUrlList" }
         val requestBody = mapOf("image_urls" to imageUrlList)
 
-        return webClient.post()
+        val responseMono = webClient.post()
             .uri("/analyze")
             .bodyValue(requestBody)
             .retrieve()
-            .bodyToMono(Map::class.java) as Mono<Map<String, Any>>
+            .bodyToMono(object : ParameterizedTypeReference<List<Map<String, Any>>>() {})
+            .block()  // 블로킹 호출
+
+        val captions = responseMono?.mapNotNull { it["caption"] as? String }
+        println(captions)
+
+        return captions
     }
 }
