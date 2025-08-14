@@ -1,0 +1,32 @@
+server:
+  port: 8082
+
+spring:
+  config:
+    import:
+      - application-jwt.yml
+      - application-mariadb.yml
+  application:
+    name: bloomnote-external-service
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+        highlight_sql: true
+
+cron:
+  trend: * * * * * *
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: DEBUG
+#        authentication: DEBUG
+#        web: DEBUG
+#    com:
+#      bloomnote: DEBUG
