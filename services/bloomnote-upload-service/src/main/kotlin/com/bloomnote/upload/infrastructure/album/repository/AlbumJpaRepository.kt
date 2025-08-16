@@ -10,4 +10,9 @@ interface AlbumJpaRepository : JpaRepository<Album, Long> {
         startDate: LocalDateTime,
         endDate: LocalDateTime
     ): List<Album>
+
+    fun findAllByCreatedDateTimeBetween(
+        startDate: LocalDateTime,
+        endDate: LocalDateTime,
+    ): List<Album>
 }

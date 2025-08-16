@@ -4,7 +4,6 @@ server:
 spring:
   config:
     import:
-      - application-jwt.yml
       - application-mariadb.yml
   application:
     name: bloomnote-external-service
@@ -19,7 +18,16 @@ spring:
         highlight_sql: true
 
 cron:
-  trend: * * * * * *
+  trend: "*/30 * * * * *"
+
+feign:
+  service:
+    album: http://localhost:8081
+
+storage:
+  url: http://192.168.0.25:9000
+  bucket: bloomnote
+  ai-server: http://58.236.116.237:5000
 
 #logging:
 #  level:

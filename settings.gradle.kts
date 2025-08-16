@@ -1,6 +1,7 @@
 rootProject.name = "bloomnote-backend"
 
 include("domains")
+include(":domains:bloomnote-feign-domain")
 
 include("modules")
 include(":modules:bloomnote-jwt-module")

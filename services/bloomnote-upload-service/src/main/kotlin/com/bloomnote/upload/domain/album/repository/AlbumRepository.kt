@@ -5,9 +5,16 @@ import java.time.LocalDateTime
 
 interface AlbumRepository {
     fun save(album: Album): Album
+
     fun saveAll(albums: List<Album>): List<Album>
+
     fun findByUserIdAndCreatedDateBetween(
         userId: Long,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime,
+    ): List<Album>
+
+    fun findAllByCreateDateTimeBetween(
         startDate: LocalDateTime,
         endDate: LocalDateTime,
     ): List<Album>

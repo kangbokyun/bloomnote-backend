@@ -28,4 +28,11 @@ class AlbumRepositoryImpl(
             endDate = endDate
         )
     }
+
+    override fun findAllByCreateDateTimeBetween(startDate: LocalDateTime, endDate: LocalDateTime): List<Album> {
+        return albumJpaRepository.findAllByCreatedDateTimeBetween(
+            startDate = startDate,
+            endDate = endDate
+        )
+    }
 }
